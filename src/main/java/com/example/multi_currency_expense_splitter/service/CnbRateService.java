@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -33,9 +32,10 @@ public class CnbRateService {
 
     private List<CnbRateDto> retrieveCurrentRates(){
         CnbRatesResponse ratesResponse = ratesClient.currentCnbRates();
-        List<CnbRateDto> ratesArray = ratesResponse.rates();
-        return !ratesArray.isEmpty()?
-                ratesArray : Collections.emptyList();
+        if (ratesResponse == null || ratesResponse.rates() == null) {
+            return Collections.emptyList();
+        }
+        return ratesResponse.rates();
     }
 
     public List<CnbRate> saveRetrievedRates(){
